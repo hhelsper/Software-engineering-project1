@@ -1,7 +1,6 @@
 import collections
 import requests
 import os
-#import more_itertools as mt
 import random
 from dotenv import load_dotenv, find_dotenv
 
@@ -26,7 +25,7 @@ def get_movie_data():
         '198663'
         ]
     params = {
-        #'movie_id': random.choice(movie_ids),
+        
         'api_key': os.getenv('TMDB_KEY'),
     }
 
@@ -34,7 +33,7 @@ def get_movie_data():
     response = requests.get(BASE_URL + random.choice(movie_ids), params=params)
     data = response.json()
     
-    #articles = data['response']['docs']
+    
     def flatten(x):
         if isinstance(x, dict) :
             return [x]
@@ -45,19 +44,12 @@ def get_movie_data():
 
     genre_list = [data['genres']]
     list = flatten(genre_list)
-    print(len(list))
-    #[d['name'] for d in mt.collapse(genre_list, base_type=dict)]
+
     genre_names = [d['name'] for d in list]
     
-    #for genre in len(data['genres']):
-        #genre_list.append(genre)
-   
-    
     return {
-        #data
+        
         'name': data['original_title'],
         'overview': data['tagline'],
         'genre': genre_names
     }
-num = get_movie_data()
-print(num)
