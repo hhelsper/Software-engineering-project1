@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href={{ url_for( 'static', filename='style.css' ) }} />
+</head>
+
+<body>
+    <center><h1>Recommended Movie</h1></center>
+    <div>
+        
+        <div>
+            <center><h2>{{ name }}</h2></center>
+            <center><h3>{{ overview }}</h3></center>
+ 
+            <center><h4> Genres: {{', '.join(genres)}}</h4></center> 
+                
+        </div>
+        
+    </div>
+
+</body>
+
+</html>
