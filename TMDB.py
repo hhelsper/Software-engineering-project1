@@ -34,18 +34,12 @@ def get_movie_data():
     data = response.json()
     
     
-    def flatten(x):
-        if isinstance(x, dict) :
-            return [x]
-        elif isinstance(x, collections.Iterable) :
-            return [a for i in x for a in flatten(i)]
-        else:
-            return [x]
+ 
 
-    genre_list = [data['genres']]
-    list = flatten(genre_list)
+    genre_list = data['genres']
+    
 
-    genre_names = [d['name'] for d in list]
+    genre_names = [d['name'] for d in genre_list]
     
     return {
         
