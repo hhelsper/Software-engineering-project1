@@ -15,13 +15,14 @@ def hello_world():
 
     
     movie_data = get_movie_data()
-
+    
     return render_template(
         "index.html",
         
         name =movie_data['name'],
         overview =movie_data['overview'],
-        genres = movie_data['genre']
+        genres = movie_data['genre'],
+        img_url = movie_data['image_url']
     )
 
 app.run(

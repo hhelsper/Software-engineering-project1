@@ -29,9 +29,10 @@ def get_movie_data():
         'api_key': os.getenv('TMDB_KEY'),
     }
 
-
-    response = requests.get(BASE_URL + random.choice(movie_ids), params=params)
+    chosen_movie = random.choice(movie_ids)
+    response = requests.get(BASE_URL + chosen_movie, params=params)
     data = response.json()
+    
     
     
  
@@ -45,5 +46,8 @@ def get_movie_data():
         
         'name': data['original_title'],
         'overview': data['tagline'],
-        'genre': genre_names
+        'genre': genre_names,
+        'image_url': BASE_URL + chosen_movie + '/images' + data['backdrop_path']
     }
+
+
