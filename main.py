@@ -22,7 +22,8 @@ def hello_world():
         name =movie_data['name'],
         overview =movie_data['overview'],
         genres = movie_data['genre'],
-        img_url = movie_data['image_url']
+        img_url = movie_data['image_url'],
+        wiki_link = movie_data['wiki_link']
     )
 
 app.run(

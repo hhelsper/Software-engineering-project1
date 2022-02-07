@@ -4,6 +4,8 @@ import os
 import random
 from dotenv import load_dotenv, find_dotenv
 
+from wiki import get_wiki_link
+
 load_dotenv(find_dotenv()) # This is to load your API keys from .env
 
 BASE_URL = 'https://api.themoviedb.org/3/movie/'
@@ -34,7 +36,7 @@ def get_movie_data():
     data = response.json()
     
     
-    
+    wiki_link = get_wiki_link(data['original_title'])
  
 
     genre_list = data['genres']
@@ -47,7 +49,8 @@ def get_movie_data():
         'name': data['original_title'],
         'overview': data['tagline'],
         'genre': genre_names,
-        'image_url': 'https://image.tmdb.org/t/p/w500' + data['poster_path']
+        'image_url': 'https://image.tmdb.org/t/p/w500' + data['poster_path'],
+        'wiki_link': wiki_link
     }
 
 
