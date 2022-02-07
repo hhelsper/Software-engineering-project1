@@ -47,7 +47,7 @@ def get_movie_data():
         'name': data['original_title'],
         'overview': data['tagline'],
         'genre': genre_names,
-        'image_url': BASE_URL + chosen_movie + '/images' + data['backdrop_path']
+        'image_url': 'https://image.tmdb.org/t/p/w500' + data['poster_path']
     }
 
 
