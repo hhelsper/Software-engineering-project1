@@ -13,3 +13,7 @@ body {
 .item {
     padding: 4px;
 }
+
+img {
+    border-radius: 25px;;
+  }
