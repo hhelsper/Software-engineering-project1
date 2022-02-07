@@ -47,4 +47,18 @@ For this project, I used two API's: the TMDB API to get data on a predefined lis
 
 ## Reflections on my project
 
-### 
+### Known Problems with my Project
+
+I've painstakingly made sure there are no problems with my project. The final thing to fix was the stylistic errors. I had a ton of trailing whitespace issues that I had to solve, but I have now gotten my Pylint errors down to 0. Other than that, there are no bugs in my code, I have ensured that each wikipedia link takes you to the correct page for the movie and not another page and that all the titles, one line descriptions, genres, and movie posters are all correct and display as specified. 
+
+### Technical Issues encountered during project
+
+The first one is pretty dumb but took me awhile to figure out. I had written some python code to format the json I got back from the TMDB server. I mistakenly put the list I had parced from the json inside another list and kept getting errors when I tried to access the information in the nested list. I googled how to fix this and ended up writing a flatten method to take the nested list and turn it into just one list. It wasn't only until hours spent away from the code that I looked back and saw where I was putting the list into a list. It was at this point that I refactored my code, took away the additional outer list, and was finally able to parse the original list of entries as was intended. I was then also able to delete the unneeded flatten method from my code.
+
+The second technical issue I had was when trying to display the movie poster. I kept thinking that the url I had to attatch the movie poster identifier from the json, the one ending in `.png`, was the original url I used to access the database. It was only after hours reviewing the TMDB's documentation for images that I saw an example url that was completely different from the database query url. I then copied the base of this url into my code and concatinated it with the movie poster identifier and bingo, the movie poster displayed just as it should have. 
+
+The third technical issue was not realizing that HTML is a scripting language and not a specific coding language itself. I was under the impression that HTML was its own language like python or java and when I was googling how to write HTML code, I kept getting results that showed me javascript code. I assumed this can't be right! I had to call my dad after awhile, a seasoned software engineer and he explained to me that you can write lots of different types of coding languages embedded within an HTML document. Once I figured this out, I was able to better understand and implement logic in python within my `index.html` that displayed the movie info I needed to display, the way I wanted it displayed. 
+
+### Future Improvements
+
+Since I've gotten the core of the code working and the webpage does exactly what it's supposed to do, in addition to fixing all the stylistic errors I was having in my code, I would say the only thing left that I would like to do as far as the requirements for milestone 1 are concerned, is improving the look and feel of my site. I would mainly like to style my site to make it look a bit more modern and sleek. I would like to spend some time watching some tutorials on youtube for writing stylish html and css code and encorporating that style into my web page. 
