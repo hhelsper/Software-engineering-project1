@@ -28,8 +28,23 @@ to check out your newly deployed website locally!
 If you are interested [CLICK HERE](https://mysterious-thicket-40093.herokuapp.com) to view my site!
 
 
-## Overview of utilities used to create this project
+## Overview of Libraries used to create this project
 
 For this project I utilized flask, a small and lightweight Python web framework that allowed me to build my web application. 
 I also had to import and use the external python libraries: `python-dotenv`, `requests`, and `flask` itself, as well as several internal libraries like `os`, and `random`.
-The `requests` library allowed me to make calls to the TMDB web API and get back a response with the relevant info on the movie I was querying for, which I then converted into a json and parced to find and store the relevant information on the movies I would display. 
+
+The `requests` library allowed me to make calls to the TMDB web API and get back a response with the relevant info on the movie I was querying for, which I then converted into a json and parced to find and store the relevant information on the movies I would then display on my web page. 
+
+The `python-dotenv` library was used to retreive my TMDB API key from my `.env` file in a secure manner to then use in my main codebase when making calls to TMDB's API.
+
+The `os` library was also used in retreival of the API key stored in my `.env` file using the method `.getenv()`.
+
+Finally, the `random` library was used to randomize the choices of movie ID's I kept within a list that I would plug into my API call to get the info on that specific movie to use and manipulate to ultimately populate my webpage with.
+
+## Overview of API's used to create this project
+
+For this project, I used two API's: the TMDB API to get data on a predefined list of movies as well as the wikipedia API to provide links at the bottom of my webpage for the viewer to follow and be taken to that movie's wikipedia page. 
+
+## Reflections on my project
+
+### 
