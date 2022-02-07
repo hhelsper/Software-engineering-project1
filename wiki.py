@@ -1,21 +1,22 @@
-
+import requests
 
 def get_wiki_link(title):
-    import requests
-    S = requests.Session()
+    """ This makes a call to the wikipedia API """
+    session = requests.Session()
 
-    URL = "https://en.wikipedia.org/w/api.php"
+    url = "https://en.wikipedia.org/w/api.php"
 
-    SEARCHPAGE = title + ' movie'
+    search = title + ' movie'
 
-    PARAMS = {
+    params = {
         "action": "query",
         "format": "json",
         "list": "search",
-        "srsearch": SEARCHPAGE
+        "srsearch": search
     }
 
-    R = S.get(url=URL, params=PARAMS)
-    DATA = R.json()
-    pageId = DATA['query']['search'][0]['pageid']
-    return 'https://en.wikipedia.org/?curid=' + str(pageId)
+    response = session.get(url=url, params=params)
+    data = response.json()
+    page_id = data['query']['search'][0]['pageid']
+
+    return 'https://en.wikipedia.org/?curid=' + str(page_id)
