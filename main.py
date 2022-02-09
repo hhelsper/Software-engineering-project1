@@ -6,6 +6,8 @@ from flask import Flask, render_template
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
+
+
 @app.route('/')
 def hello_world():
     """ Returns root endpoint HTML """
@@ -20,6 +22,15 @@ def hello_world():
         img_url = movie_data['image_url'],
         wiki_link = movie_data['wiki_link']
         )
+
+
+@app.route('/wiki')
+def wiki_page():
+    """ Returns wiki endpoint HTML """
+    return render_template(
+        "wiki.html",
+    )
+
 
 app.run(
     host=os.getenv('IP', '0.0.0.0'),

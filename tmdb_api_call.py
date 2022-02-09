@@ -10,7 +10,6 @@ load_dotenv(find_dotenv()) # This is to load your API keys from .env
 BASE_URL = 'https://api.themoviedb.org/3/movie/'
 
 
-
 def get_movie_data():
     """ Chooses randomly from list of movie ids to do a get from TMDB's server """
 
@@ -32,6 +31,7 @@ def get_movie_data():
     chosen_movie = random.choice(movie_ids)
     response = requests.get(BASE_URL + chosen_movie, params=params)
     data = response.json()
+
 
     wiki_link = get_wiki_link(data['original_title'])
 
