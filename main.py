@@ -1,6 +1,6 @@
 import os
 from tmdb_api_call import get_movie_data
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 
 app = Flask(__name__)
@@ -8,11 +8,16 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 
 
-@app.route('/')
+@app.route('/', methods=["POST", "GET"])
 def hello_world():
     """ Returns root endpoint HTML """
+    if request.method == "POST":
+        chosen_movie = request.form.get("chosen_movie")
+    else:
+        chosen_movie = ''
 
-    movie_data = get_movie_data()
+
+    movie_data = get_movie_data(chosen_movie)
 
     return render_template(
         "index.html",
@@ -20,7 +25,10 @@ def hello_world():
         overview =movie_data['overview'],
         genres = movie_data['genre'],
         img_url = movie_data['image_url'],
-        wiki_link = movie_data['wiki_link']
+        wiki_link = movie_data['wiki_link'],
+        similar_movie_ids = movie_data['similar_movie_ids'],
+        similar_movies = movie_data['similar_movies'],
+        similar_posters = movie_data['similar_posters'],
         )
 
 

@@ -39,6 +39,8 @@ The `python-dotenv` library was used to retreive my TMDB API key from my `.env` 
 
 The `os` library was also used in retreival of the API key stored in my `.env` file using the method `.getenv()`.
 
+I used two internal libraries within the `flask` library: `render_template` and `request`. The `render_template` was used to render the python code through flask into an html doc that then was able to display my webpage using the logic written in python. The `request`, I actually learned about last week from an in class demo, which basically is used to know when a POST was made by the HTML and then notify my interal logic in my python code as well as to then store the data that was posted back to that code.
+
 Finally, the `random` library was used to randomize the choices of movie ID's I kept within a list that I would plug into my API call to get the info on that specific movie to use and manipulate to ultimately populate my webpage with.
 
 ## Overview of API's used to create this project
@@ -47,9 +49,13 @@ For this project, I used two API's: the TMDB API to get data on a predefined lis
 
 ## Reflections on my project
 
+## Overview of what I created
+
+For this project, I started by creating what was a duplicate of the example given by my professor in his assignment document. Given that I started early on this project, once I got the bear minimum working, I started to delve into additional features as well as styling of my web page. I used bootstrap to create the custom navigation bar at the top of my page that a user can actually interact with. The navigation bar has two choices: Recommended Movie and Wikipedia. Every time you click Recommended Movie, a movie is displayed from my pre-defined list of movies that I embedded in my `tmdb_api_call.py`. When you click on Wikipedia, you are taken to the wikipedia page for that movie, which I embedded into my website. I made this decision because I thought it was logical to stay on my website page and not be taken to another page, as well as for what I believe is a more stylistic approach. I also decided to go beyond the assignment requirements by including four similar movies at the bottom of the screen. All four of these are clickable which will then repopulate the page with the main movie displayed being the similar movie you just clicked on, as well as refreshing the similar movies displayed at the bottom to reflect those similar to the new movie displayed at the top of the screen. At the recommendation of a fellow student, I explored Google Fonts as a way to bring more style to my web page. I employed four custom Google Fonts in my project, which I believe is an improvement from what I started with, copying my professor's example. 
+
 ### Known Problems with my Project
 
-I've painstakingly made sure there are no problems with my project. The final thing to fix was the stylistic errors. I had a ton of trailing whitespace issues that I had to solve, but I have now gotten my Pylint errors down to 0. Other than that, there are no bugs in my code, I have ensured that each wikipedia link takes you to the correct page for the movie and not another page and that all the titles, one line descriptions, genres, and movie posters are all correct and display as specified. 
+I've painstakingly made sure there are no problems with my project. The final thing to fix was the stylistic errors. I had a ton of trailing whitespace issues that I had to solve, but I have now gotten my Pylint errors down to 0. Other than that, there are no bugs in my code, I have ensured that each wikipedia link takes you to the correct page for the movie and not another page and that all the titles, one line descriptions, genres, and movie posters are all correct and display as specified, as well as to make sure the four displayed similar movies are the top four queried from the TMDB server.
 
 ### Technical Issues encountered during project
 
@@ -58,6 +64,10 @@ The first one is pretty dumb but took me awhile to figure out. I had written som
 The second technical issue I had was when trying to display the movie poster. I kept thinking that the url I had to attatch the movie poster identifier from the json, the one ending in `.png`, was the original url I used to access the database. It was only after hours reviewing the TMDB's documentation for images that I saw an example url that was completely different from the database query url. I then copied the base of this url into my code and concatinated it with the movie poster identifier and bingo, the movie poster displayed just as it should have. 
 
 The third technical issue was not realizing that HTML is a scripting language and not a specific coding language itself. I was under the impression that HTML was its own language like python or java and when I was googling how to write HTML code, I kept getting results that showed me javascript code. I assumed this can't be right! I had to call my dad after awhile, a seasoned software engineer and he explained to me that you can write lots of different types of coding languages embedded within an HTML document. Once I figured this out, I was able to better understand and implement logic in python within my `index.html` that displayed the movie info I needed to display, the way I wanted it displayed. 
+
+Another huge issue for me was figuring out how to pass variables from one HTML document to another. I solved this problem through hours of Googling and was ultimately able to do it by utilizing very specific javascript code into my HTMLs. My professor even said when I asked him about this problem that it was a very unique problem that he had no idea how to solve, so I am very proud of myself for overcoming this issue. 
+
+A smaller problem I encountered was how to approach making the similar movies clickable and for that to then post back movie Ids to my python code so the code could be recompiled and the page reloaded with the new main movie as the similar movie just clicked on. Again, I turned to Google and found my solution in utilizing a `button` in HTML in which I nested the poster images of the similar movies. 
 
 ### Future Improvements
 

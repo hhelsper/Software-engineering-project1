@@ -8,16 +8,12 @@
     <style> @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');</style>
     <style> @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500&family=Indie+Flower&display=swap');</style>
     <style> @import url('https://fonts.googleapis.com/css2?family=Stick+No+Bills:wght@200&display=swap');</style>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
-      </style>
+    <style> @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');</style>
 </head>
 
 <body>
 
-  <!--sessionStorage.setItem("wiki_url", {wiki_link});-->
   <script> 
-    
     var wiki_url = {wiki_link};
   </script>
     
@@ -45,8 +41,18 @@
             <center><h4> <span style="font-size: 47px; color: black; font-family: 'Stick No Bills', sans-serif;">Genres:</span> {{', '.join(genres)}}</h4></center> 
             <center><img src="{{img_url}}"></center>
             
+            <center><h5>Similar Movies</h5></center>
+              <div class='container'>
+                  {% for i in range(4) %}
+                  <div>
+                      <form method="POST" action="/">
+                        <center><button name="chosen_movie" value="{{ similar_movie_ids[i] }}"><img src="{{ similar_posters[i] }}"></button></center>
+                      </form>
+
+                  </div>
+                  {% endfor %}
+              </div>
             
-                
         </div>
         
     </div>
