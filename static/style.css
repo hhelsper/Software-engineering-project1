@@ -31,6 +31,14 @@ h5{
     padding-bottom: 25px;
 }
 
+h6{
+    color: rgb(16, 14, 22);
+    font-family: 'Quicksand', sans-serif;
+    font-size: 16pt;
+    padding-bottom: 80px;
+    display: inline;
+}
+
 img {
     border-radius: 25px;
     
@@ -59,4 +67,74 @@ button{
     border: none;
     background-color: #d8d8d8;
     
+}
+
+textarea {
+    width:50%;
+    resize: vertical;
+    padding:15px;
+    border-radius:15px;
+    border:0;
+    font-family: 'Courier';
+    font-size: 13pt;
+    box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+    height:60px;
+  }
+
+  .pos_right {
+    position: relative;
+    left: 193px;
+}
+
+input[type=submit] {
+    padding:5px 15px; 
+    background:rgb(187, 182, 182); 
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    box-shadow:0 0 4px 4px rgba(66, 65, 65, 0.06);
+    border-radius: 5px; 
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+.rate {
+    
+    margin: auto;
+    height: 46px;
+    padding: 0 10px;
+}
+.rate:not(:checked) > input {
+    position:absolute;
+    margin: auto;
+    top:-9999px;
+}
+.rate:not(:checked) > label {
+    /* float:right; */
+    width:1em;
+    margin: auto;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+}
+.rate:not(:checked) > label:before {
+    content: '★ ';
+}
+.rate > input:checked ~ label {
+    color: #ffc700;    
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #deb217;  
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #c59b08;
 }
