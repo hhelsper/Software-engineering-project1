@@ -2,4 +2,6 @@ Flask
 requests
 python-dotenv
 flask_sqlalchemy
+sqlalchemy
 flask_login
+werkzeug
