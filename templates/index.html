@@ -22,6 +22,12 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cutive+Mono&display=swap');
   </style>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Amatic+SC&family=Secular+One&display=swap');
+  </style>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Caveat&display=swap');
+  </style>
 </head>
 
 <body>
@@ -48,6 +54,14 @@
   </nav>
 
   <div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div>
+      <script>alert("You've already rated this movie. Rate another one!");</script>
+
+    </div>
+    {% endif %}
+    {% endwith %}
 
     <div>
       <center>
@@ -66,20 +80,29 @@
       <br>
 
       <center>
-
-        <div class="rate">
-          <input type="radio" id="star5" name="rate" value="5" />
-          <label for="star5" title="text">5 stars</label>
-          <input type="radio" id="star4" name="rate" value="4" />
-          <label for="star4" title="text">4 stars</label>
-          <input type="radio" id="star3" name="rate" value="3" />
-          <label for="star3" title="text">3 stars</label>
-          <input type="radio" id="star2" name="rate" value="2" />
-          <label for="star2" title="text">2 stars</label>
-          <input type="radio" id="star1" name="rate" value="1" />
-          <label for="star1" title="text">1 star</label>
-          <h6>4/5</h6>
-        </div>
+        {% if avg_rating == 0 %}
+        <h6> No ratings yet </h6>
+        {% else %}
+        <h6><span style="font-size: 33px; color: black; font-family: 'Stick No Bills', sans-serif;">Rating:</span>
+          <span
+            style="font-family: 'Quicksand', sans-serif; color: #deb217; font-size: 29px; font-weight: bold; padding-bottom: 20px;">{{avg_rating}}/5</span>
+        </h6>
+        {% endif %}
+        <form method="POST" action="/home_page_reload" name="rating">
+          <div class="rate">
+            <input type="radio" id="star5" name="rate" value="5" onclick="document.rating.submit()" />
+            <label for="star5" title="text">5 stars</label>
+            <input type="radio" id="star4" name="rate" value="4" onclick="document.rating.submit()" />
+            <label for="star4" title="text">4 stars</label>
+            <input type="radio" id="star3" name="rate" value="3" onclick="document.rating.submit()" />
+            <label for="star3" title="text">3 stars</label>
+            <input type="radio" id="star2" name="rate" value="2" onclick="document.rating.submit()" />
+            <label for="star2" title="text">2 stars</label>
+            <input type="radio" id="star1" name="rate" value="1" onclick="document.rating.submit()" />
+            <label for="star1" title="text">1 star</label>
+          </div>
+          <input value="{{movie_id}}" type="hidden" name="movie_id">
+        </form>
 
       </center>
 
@@ -93,6 +116,23 @@
             type="submit" value="Leave a comment" />
 
         </form>
+
+      </center>
+
+      <br>
+      <center>
+        <h3>Comments</h3>
+      </center>
+      <center>
+        <div class="comments">
+          {% for i in range(num_comments) %}
+          <div class="h8">{{comments[i].user_name}}:</div>
+          <span style="font-size: 12pt;font-family: 'Courier';">{{comments[i].comment}}</span><span
+            style="font-size: 15px; color: black; font-family: 'Stick No Bills', sans-serif;"><br>
+            &emsp;{{comments[i].time_created.strftime('%a, %I:%M %p')}} <br>
+          </span>
+          {% endfor %}
+        </div>
       </center>
 
       <br>

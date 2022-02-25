@@ -1,3 +1,4 @@
+"""This is the file that houses the main driver code for my web app"""
 import os
 from tmdb_api_call import get_movie_data
 from flask_sqlalchemy import SQLAlchemy
@@ -34,42 +35,51 @@ db = SQLAlchemy(app)
 
 
 class User(UserMixin, db.Model):
+    """This is the User Model"""
+
     __tablename__ = "user"
     user_id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(120), nullable=False)
     password = db.Column(db.String(120), nullable=False)
 
     def __repr__(self):
+        """Neccessary function for Flask Login"""
         return "<User %r" % self.user_name
 
     def get_username(self):
+        """Neccessary function for Flask Login"""
         return self.user_name
 
     def get_id(self):
+        """Neccessary function for Flask Login"""
         return self.user_id
 
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Neccessary function for Flask Login"""
     return User.query.get(int(user_id))
 
 
 class Rating(db.Model):
+    """This is the Ratings model"""
+
     __tablename__ = "rating"
     id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.Integer, db.ForeignKey("user.user_name"))
+    user_name = db.Column(db.String(120), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     movie_name = db.Column(db.String(120), nullable=False)
 
 
 class Comment(db.Model):
+    """This is the comments model"""
+
     __tablename__ = "comment"
     id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.Integer, db.ForeignKey("user.user_name"))
+    user_name = db.Column(db.String(120), nullable=False)
     comment = db.Column(db.String(300), nullable=False)
     movie_name = db.Column(db.String(120), nullable=False)
     time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
-    wiki_link = db.Column(db.String(300), nullable=False)
 
 
 db.create_all()
@@ -88,6 +98,7 @@ def hello_world():
 @login_required
 def home_page():
     """Returns root endpoint HTML"""
+
     if request.method == "POST":
         chosen_movie = request.form.get("chosen_movie")
     else:
@@ -95,9 +106,31 @@ def home_page():
 
     movie_data = get_movie_data(chosen_movie)
 
+    chosen_movie = movie_data["movie_id"]
+
+    ratings = Rating.query.filter_by(movie_name=chosen_movie).all()
+
+    if len(ratings) == 0:
+        avg_rating = 0
+    else:
+        num_ratings = len(ratings)
+
+        ratings_total = 0
+
+        for i in range(num_ratings):
+            ratings_total += ratings[i].rating
+
+        avg_rating = "{:.1f}".format(ratings_total / num_ratings)
+
+    comments = Comment.query.filter_by(movie_name=chosen_movie).all()
+    num_comments = len(comments)
+
     print(chosen_movie)
     return render_template(
         "index.html",
+        avg_rating=avg_rating,
+        comments=comments,
+        num_comments=num_comments,
         movie_id=movie_data["movie_id"],
         name=movie_data["name"],
         overview=movie_data["overview"],
@@ -117,12 +150,53 @@ def home_page_reload():
     """Returns root endpoint HTML"""
 
     chosen_movie = request.form.get("movie_id")
+    rating = request.form.get("rate")
+    comment = request.form.get("comment")
+    if rating is not None:
+        if Rating.query.filter_by(
+            user_name=current_user.user_name, movie_name=chosen_movie
+        ).first():
+            flash("You've already rated this movie. Rate another one!")
+        else:
+            new_rating = Rating(
+                user_name=current_user.user_name, rating=rating, movie_name=chosen_movie
+            )
+            db.session.add(new_rating)
+            db.session.commit()
+    elif comment is not None:
 
-    print("chosen movie:" + request.form.get("movie_id"))
+        new_comment = Comment(
+            user_name=current_user.user_name,
+            movie_name=chosen_movie,
+            comment=comment,
+        )
+        db.session.add(new_comment)
+        db.session.commit()
+
+    ratings = Rating.query.filter_by(movie_name=chosen_movie).all()
+
+    if len(ratings) == 0:
+        avg_rating = 0
+    else:
+        num_ratings = len(ratings)
+
+        ratings_total = 0
+
+        for i in range(num_ratings):
+            ratings_total += ratings[i].rating
+
+        avg_rating = "{:.1f}".format(ratings_total / num_ratings)
+
+    comments = Comment.query.filter_by(movie_name=chosen_movie).all()
+    num_comments = len(comments)
+
     movie_data = get_movie_data(chosen_movie)
 
     return render_template(
         "index.html",
+        avg_rating=avg_rating,
+        comments=comments,
+        num_comments=num_comments,
         movie_id=chosen_movie,
         name=movie_data["name"],
         overview=movie_data["overview"],
@@ -167,13 +241,12 @@ def login():
 
 @app.route("/login", methods=["POST"])
 def login_post():
-    # login code goes here
+
     if request.form.get("signup") == "signup":
         return render_template("signup.html")
 
     user_name = request.form.get("user_name")
     password = request.form.get("password")
-    remember = True if request.form.get("remember") else False
 
     user = User.query.filter_by(user_name=user_name).first()
 
@@ -181,9 +254,7 @@ def login_post():
         flash("Please check your login details and try again.")
         return redirect(url_for("login"))
 
-    movie_data = get_movie_data("")
-
-    login_user(user, remember=remember)
+    login_user(user)
 
     return redirect("/home_page")
 
@@ -193,24 +264,6 @@ def login_post():
 def wiki_page():
     """Returns wiki endpoint HTML"""
     return render_template("wiki.html")
-
-
-# @app.route("/comments", methods=["GET", "POST"])
-# @login_required
-# def comments():
-#     """Returns wiki endpoint HTML"""
-
-#     if request.method == "POST":
-#         data = request.form
-#         comment = Comment(
-#             comment=data["comment"],
-#             wiki_link=data["wiki_link"],
-#             movie_name=data["movie_name"],
-#             user_name=current_user.user_name,
-#         )
-#     return render_template(
-#         "comments.html",
-#     )
 
 
 @app.route("/logout")

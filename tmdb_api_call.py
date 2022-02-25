@@ -1,3 +1,4 @@
+"""This file contains methods to get movie data from TMDB API"""
 import os
 import random
 import requests
