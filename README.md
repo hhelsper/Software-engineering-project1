@@ -21,11 +21,11 @@ Run these commands in your terminal to get started:
 Once you have signed up and received an API key you'll need to add a .env file to your project.
 Inside this .env file create a variable called (`TMDB_KEY`) and assign it a string value of your newly aquired API Key.
 The rest of my code will locate this key in your `.env` file and use it to pull the necessary info down from TMDB.
-This key is meant to be super secret, but don't worry. I have included a `.gitignore` file that will keep this secret automatically. Next, 
+This key is meant to be super secret, but don't worry. I have included a `.gitignore` file that will keep this secret automatically.
 
 ## You're ready to Run!
 
-Finally, all you have to do now is open up a new terminal window and type in `python main.py` and you should be given a link 
+Finally, all you have to do now is open up a new terminal window and type in `python3 main.py` and you should be given a link 
 to check out your newly deployed website locally!
 
 ## Check out my own deployment of the site!
@@ -40,7 +40,7 @@ I also had to import and use the external python libraries: `python-dotenv`, `re
 
 The `requests` library allowed me to make calls to the TMDB web API and get back a response with the relevant info on the movie I was querying for, which I then converted into a json and parced to find and store the relevant information on the movies I would then display on my web page. 
 
-The `python-dotenv` library was used to retreive my TMDB API key from my `.env` file in a secure manner to then use in my main codebase when making calls to TMDB's API.
+The `python-dotenv` library was used to retreive my TMDB API key from my `.env` file in a secure manner to then use in my main codebase when making calls to TMDB's API, as well as my `DATABASE_URL` to connect me with heroku's database and my `SECRET_KEY` which allows me to display flash messages.
 
 The `os` library was also used in retreival of the API key stored in my `.env` file using the method `.getenv()`.
 

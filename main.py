@@ -27,6 +27,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DB_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
+# three lines of code necessary for flask login
 login_manager = LoginManager()
 login_manager.login_view = "hello_world"
 login_manager.init_app(app)
@@ -79,12 +80,14 @@ class Comment(db.Model):
     user_name = db.Column(db.String(120), nullable=False)
     comment = db.Column(db.String(300), nullable=False)
     movie_name = db.Column(db.String(120), nullable=False)
+    # automatically generated timestamp for each comment which will display next to comment
     time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
 
+# creates all db models
 db.create_all()
 
-
+# base route of web app that starts user at the login page
 @app.route("/", methods=["POST", "GET"])
 def hello_world():
     """Returns root endpoint HTML"""
@@ -94,29 +97,33 @@ def hello_world():
     )
 
 
+# this is the route for the first main page loaded
 @app.route("/home_page", methods=["POST", "GET"])
 @login_required
 def home_page():
     """Returns root endpoint HTML"""
-
+    # if else statment to see if movie was selected from similar movies and set var to that movie id
     if request.method == "POST":
         chosen_movie = request.form.get("chosen_movie")
     else:
         chosen_movie = ""
 
+    # makes a call to tmdb db to get all required data on currently displayed movie
     movie_data = get_movie_data(chosen_movie)
 
+    # stores tmdb movie id to pass back to html
     chosen_movie = movie_data["movie_id"]
 
+    # queries all ratings in db
     ratings = Rating.query.filter_by(movie_name=chosen_movie).all()
-
+    # sets average rating to 0 which is used in html to display text no ratings yet
     if len(ratings) == 0:
         avg_rating = 0
     else:
         num_ratings = len(ratings)
 
         ratings_total = 0
-
+        # for loop to calculate the average ratings for movie and round to 1 dec point
         for i in range(num_ratings):
             ratings_total += ratings[i].rating
 
@@ -125,7 +132,8 @@ def home_page():
     comments = Comment.query.filter_by(movie_name=chosen_movie).all()
     num_comments = len(comments)
 
-    print(chosen_movie)
+    # this return statement passes all the info along to the main html
+    # so that the movie page plus ratings and comments can be rendered
     return render_template(
         "index.html",
         avg_rating=avg_rating,
@@ -144,26 +152,35 @@ def home_page():
     )
 
 
+# this is the route for the main page reload which I use
+# to make sure the page does not auto refresh to another movie
+# but stays on the movie just rated or commented on so that
+# user can view the rating or comment just posted
 @app.route("/home_page_reload", methods=["POST", "GET"])
 @login_required
 def home_page_reload():
-    """Returns root endpoint HTML"""
+    """This route and function takes in comment or rating and posts it back to html"""
 
     chosen_movie = request.form.get("movie_id")
     rating = request.form.get("rate")
 
     comment = request.form.get("comment")
+    # if else if statement to determine whether rating or comment has been posted back
+    # if rating is returned this code saves rating to db
     if rating is not None:
+        # if else statment to disallow user to rate movies more than once
         if Rating.query.filter_by(
             user_name=current_user.user_name, movie_name=chosen_movie
         ).first():
             flash("You've already rated this movie. Rate another one!")
         else:
+            # saves first user rating to db
             new_rating = Rating(
                 user_name=current_user.user_name, rating=rating, movie_name=chosen_movie
             )
             db.session.add(new_rating)
             db.session.commit()
+    # if comment returned this code saves the comment to the db
     elif comment is not None:
 
         new_comment = Comment(
@@ -175,24 +192,28 @@ def home_page_reload():
         db.session.commit()
 
     ratings = Rating.query.filter_by(movie_name=chosen_movie).all()
-
+    # sets average rating to 0 which is used in html to display text no ratings yet
     if len(ratings) == 0:
         avg_rating = 0
     else:
         num_ratings = len(ratings)
 
         ratings_total = 0
-
+        # for loop to calculate the average ratings for movie and round to 1 dec point
         for i in range(num_ratings):
             ratings_total += ratings[i].rating
 
         avg_rating = "{:.1f}".format(ratings_total / num_ratings)
 
+    # these two lines get and store all comments and the set the length of total comments
     comments = Comment.query.filter_by(movie_name=chosen_movie).all()
     num_comments = len(comments)
 
+    # makes a call to tmdb db to get all required data on currently displayed movie
     movie_data = get_movie_data(chosen_movie)
 
+    # this return statement passes all the info along to the main html
+    # so that the movie page plus ratings and comments can be rendered
     return render_template(
         "index.html",
         avg_rating=avg_rating,
@@ -218,12 +239,15 @@ def signup():
         user_name = request.form.get("user_name")
         password = request.form.get("password")
 
+    # checks to see if user name for signup is already in database
     user = User.query.filter_by(user_name=user_name).first()
 
+    # if user exists flash message and redirect to login
     if user:
         flash("Email address already exists. Try logging in")
         return redirect(url_for("login"))
 
+    # if user doesn't exist in db these three lines of code adds user to db
     new_user = User(
         user_name=user_name, password=generate_password_hash(password, method="sha256")
     )
@@ -231,6 +255,7 @@ def signup():
     db.session.add(new_user)
     db.session.commit()
 
+    # takes user back to login screen so they can now login after being saved to db
     return redirect("/login")
 
 
@@ -242,22 +267,27 @@ def login():
 
 @app.route("/login", methods=["POST"])
 def login_post():
-
+    """Method with logic for logging user in"""
+    # if signup button clicked in html user directed to signup page
     if request.form.get("signup") == "signup":
         return render_template("signup.html")
 
+    # pulls username and password from html form
     user_name = request.form.get("user_name")
     password = request.form.get("password")
     remember = True if request.form.get("remember") else False
 
+    # query variable used to check if user is in database
     user = User.query.filter_by(user_name=user_name).first()
-
+    # if statement checks if username is in db and password for that user matches
     if not user or not check_password_hash(user.password, password):
         flash("Please check your login details and try again.")
         return redirect(url_for("login"))
 
+    # flask_login login user method with user info passed in
     login_user(user, remember=remember)
 
+    # takes signed in user to homepage
     return redirect("/home_page")
 
 
@@ -271,6 +301,7 @@ def wiki_page():
 @app.route("/logout")
 @login_required
 def logout():
+    """Function to log user  out and redirect to login page"""
     logout_user()
     return redirect(url_for("login"))
 

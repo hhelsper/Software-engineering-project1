@@ -60,7 +60,9 @@ def get_movie_data(chosen_movie):
     )
 
     genre_list = data["genres"]
+    # saves list of genre names for queried movie
     genre_names = [d["name"] for d in genre_list]
+    # returns all necessary data to populate main page with movie content
     return {
         "movie_id": chosen_movie,
         "name": data["original_title"],
