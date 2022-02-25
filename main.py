@@ -11,7 +11,7 @@ from flask_login import (
     current_user,
     logout_user,
 )
-from flask import Flask, render_template, request, Blueprint, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import find_dotenv, load_dotenv
 
