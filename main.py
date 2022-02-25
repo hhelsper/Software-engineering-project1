@@ -247,6 +247,7 @@ def login_post():
 
     user_name = request.form.get("user_name")
     password = request.form.get("password")
+    remember = True if request.form.get("remember") else False
 
     user = User.query.filter_by(user_name=user_name).first()
 
@@ -254,7 +255,7 @@ def login_post():
         flash("Please check your login details and try again.")
         return redirect(url_for("login"))
 
-    login_user(user)
+    login_user(user, remember=remember)
 
     return redirect("/home_page")
 
@@ -275,7 +276,5 @@ def logout():
 
 if __name__ == "__main__":
     app.run(
-        host=os.getenv("IP", "0.0.0.0"),
-        port=int(os.getenv("PORT", int(8080))),
-        debug=True,
+        host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", "8080")), debug=True
     )
