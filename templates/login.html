@@ -6,8 +6,17 @@
 </head>
 
 <body>
+
+    <style>
+        html,
+        body {
+            background-image: url('/static/movie_background.jpg');
+            margin: 0;
+            height: 100%;
+        }
+    </style>
     <div class="column is-4 is-offset-4">
-        <h3 class="title">Login</h3>
+        <h3 class="title" style="color: white;">Login</h3>
         <div class="box">
             {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -35,10 +44,11 @@
                         Remember me
                     </label>
                 </div>
-                <button name="login" class="button is-block is-info is-large is-fullwidth" value="login">Login</button>
+                <button name="login" class="button is-block is-info is-large is-fullwidth" value="login"
+                    style="background-color: rgb(129, 129, 129);">Login</button>
                 <br>
-                <button name="signup" class="button is-block is-info is-large is-fullwidth"
-                    value="signup">Signup</button>
+                <button name="signup" class="button is-block is-info is-large is-fullwidth" value="signup"
+                    style="background-color: rgb(129, 129, 129);">Signup</button>
             </form>
         </div>
     </div>

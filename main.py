@@ -151,6 +151,7 @@ def home_page_reload():
 
     chosen_movie = request.form.get("movie_id")
     rating = request.form.get("rate")
+
     comment = request.form.get("comment")
     if rating is not None:
         if Rating.query.filter_by(
